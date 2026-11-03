@@ -1,0 +1,53 @@
+# ==============================================================================
+# Terraform Variables Example File
+# Copy this file to "terraform.tfvars" and customize it with your values.
+# NEVER commit "terraform.tfvars" containing real secrets to version control!
+# ==============================================================================
+
+# AWS Deployment Region
+aws_region   = "us-east-1"
+project_name = "vpc-academic-project"
+environment  = "academic"
+owner        = "Academic Lab"
+
+# Network CIDR Configuration
+vpc_cidr               = "10.0.0.0/16"
+public_subnet_cidr     = "10.0.1.0/24"
+private_subnet_cidr    = "10.0.2.0/24"
+private_db_subnet_cidr = "10.0.3.0/24"
+
+# Subnet Naming Tags
+public_subnet_name    = "public-subnet-1"
+private_subnet_1_name = "private-subnet-1"
+private_subnet_2_name = "private-subnet-2"
+
+# Configurable Availability Zones
+# Leave as [] to automatically use the first 2 available AZs in aws_region,
+# or specify explicitly: ["us-east-1a", "us-east-1b"]
+availability_zones = []
+
+# ------------------------------------------------------------------------------
+# COST OPTIMIZATION TOGGLES:
+# NAT Gateway incurs approximately $32.40/month + data processing fees.
+# Keep set to 'false' for free-tier friendly academic testing.
+# Set to 'true' only if instances in the private subnet need outbound internet access.
+# ------------------------------------------------------------------------------
+enable_nat_gateway = false
+
+# Security / Access Control (Least Privilege)
+allowed_http_cidr  = "0.0.0.0/0"
+enable_ssh_ingress = false             # Keep false to use AWS Systems Manager (SSM) for keyless shell
+allowed_ssh_cidr   = "203.0.113.25/32" # Must be your specific admin IP if enable_ssh_ingress is true (never 0.0.0.0/0)
+
+
+# EC2 Web Server Configuration
+ec2_instance_type = "t2.micro" # AWS Free Tier eligible (750 hours/month)
+ec2_key_name      = ""         # Name of an existing AWS Key Pair (leave "" to use AWS SSM)
+
+# Amazon RDS MySQL Configuration
+enable_rds_instance  = true          # Set to false to temporarily spin down RDS for cost savings
+db_instance_class    = "db.t3.micro" # AWS Free Tier eligible
+db_allocated_storage = 20            # 20 GB gp2 storage is Free Tier eligible
+db_name              = "academicdb"
+db_username          = "dbadmin"
+db_password          = "AcademicPass2026!Db" # Replace with your secure password

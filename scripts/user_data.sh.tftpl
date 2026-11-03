@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# Cloud-Init User Data Script: Full Application Tier Orchestration
+# Project: AWS VPC – Public and Private Subnet Demonstration
+# ==============================================================================
+
+set -euo pipefail
+
+# Redirect output to user-data log and console
+exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+
+echo "=========================================================="
+echo " Cloud-Init Initialization: Installing Web & Application Tiers"
+echo "=========================================================="
+
+export DEBIAN_FRONTEND=noninteractive
+
+# 1. Update APT Repositories & Install System Packages
+apt-get update -y
+apt-get install -y \
+    python3 \
+    python3-pip \
+    python3-venv \
+    apache2 \
+    libapache2-mod-php \
+    php \
+    php-cli \
+    php-curl \
+    mysql-client \
+    curl \
+    jq
+
+# 2. Setup Directories
+mkdir -p /opt/vpc-backend
+mkdir -p /var/log/vpc-app
+mkdir -p /etc/vpc-app
+mkdir -p /var/www/html/api
+
+# 3. Generate Network Configuration File
+cat << 'CONFIG_EOF' > /var/www/html/network-config.json
+{
+  "project_title": "${project_title}",
+  "vpc_id": "${vpc_id}",
+  "vpc_cidr": "${vpc_cidr}",
+  "public_subnet_cidr": "${public_subnet_cidr}",
+  "private_subnet_1_cidr": "${private_subnet_1_cidr}",
+  "private_subnet_2_cidr": "${private_subnet_2_cidr}",
+  "db_host": "${db_host}",
+  "db_name": "${db_name}",
+  "db_user": "${db_user}",
+  "db_pass": "${db_pass}",
+  "db_secret_name": "${db_secret_name}",
+  "aws_region": "${aws_region}"
+}
+CONFIG_EOF
+
+chmod 640 /var/www/html/network-config.json
+chown root:www-data /var/www/html/network-config.json
+
+# 4. Generate Application Environment File
+cat << 'ENV_EOF' > /etc/vpc-app/app.env
+AWS_REGION=${aws_region}
+VPC_ID=${vpc_id}
+DB_HOST=${db_host}
+DB_NAME=${db_name}
+DB_USER=${db_user}
+DB_PASS=${db_pass}
+DB_SECRET_NAME=${db_secret_name}
+VPC_CONFIG_PATH=/var/www/html/network-config.json
+ENV_EOF
+
+chmod 600 /etc/vpc-app/app.env
+chown www-data:www-data /etc/vpc-app/app.env
+
+# 5. Download Application Bundle from Private S3 Bucket
+echo "Fetching application bundle from s3://${assets_bucket}/app.zip..."
+apt-get install -y unzip awscli
+aws s3 cp "s3://${assets_bucket}/app.zip" /tmp/app.zip --region "${aws_region}"
+mkdir -p /tmp/app-extracted
+unzip -o /tmp/app.zip -d /tmp/app-extracted
+
+# Deploy Backend Files
+cp -r /tmp/app-extracted/backend/* /opt/vpc-backend/
+cp /tmp/app-extracted/backend/vpc-app.service /etc/systemd/system/vpc-app.service
+cp /tmp/app-extracted/backend/apache-vpc.conf /etc/apache2/sites-available/000-default.conf
+
+# Deploy Frontend Files
+cp -r /tmp/app-extracted/web/* /var/www/html/
+rm -rf /tmp/app.zip /tmp/app-extracted
+
+# 7. Setup Python Virtual Environment and Install Backend Dependencies
+python3 -m venv /opt/vpc-backend/venv
+/opt/vpc-backend/venv/bin/pip install --upgrade pip
+/opt/vpc-backend/venv/bin/pip install -r /opt/vpc-backend/requirements.txt
+
+# Set Ownership
+chown -R www-data:www-data /opt/vpc-backend
+chown -R www-data:www-data /var/log/vpc-app
+chown -R www-data:www-data /var/www/html
+find /var/www/html -type d -exec chmod 755 {} \;
+find /var/www/html -type f -exec chmod 644 {} \;
+
+# 8. Enable and Start Systemd Managed Flask Backend Service
+systemctl daemon-reload
+systemctl enable vpc-app.service
+systemctl restart vpc-app.service
+
+# 9. Configure Apache Reverse Proxy & Restart
+a2enmod proxy
+a2enmod proxy_http
+a2enmod rewrite
+a2enmod headers
+
+systemctl enable apache2
+apache2ctl configtest
+systemctl restart apache2
+
+echo "=========================================================="
+echo " Cloud-Init Finished Successfully: Full Stack Ready"
+echo "=========================================================="

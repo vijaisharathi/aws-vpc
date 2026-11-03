@@ -1,0 +1,6 @@
+# Local VPC Simulation Application Requirements
+# Runs 100% locally on Windows without AWS SDK, Boto3, or cloud credentials
+Flask>=3.0.0,<3.1.0
+gunicorn>=21.2.0,<22.0.0
+python-dotenv>=1.0.0
+pytest>=8.0.0

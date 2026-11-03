@@ -1,0 +1,2139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VPC with Public and Private Subnets Simulation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="portal-body">
+
+  <!-- =========================================================================
+       1. PERSISTENT LEFT SIDEBAR NAVIGATION
+       ========================================================================= -->
+  <aside id="portal-sidebar" class="portal-sidebar">
+    <!-- Sidebar Header / Brand -->
+    <div class="sidebar-header">
+      <div class="sidebar-brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/>
+            <path d="M12 12v9"/>
+            <path d="m8 17 4 4 4-4"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-title">VPC SIMULATOR <span class="brand-badge">ACADEMIC</span></div>
+          <span class="brand-subtitle">Public &amp; Private Subnets</span>
+        </div>
+      </div>
+      <button id="sidebar-toggle-btn" class="sidebar-toggle-btn" title="Toggle Sidebar [Ctrl+B]">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Navigation Categories -->
+    <nav class="sidebar-nav">
+      <!-- CATEGORY 1: OVERVIEW -->
+      <div class="nav-section-title">OVERVIEW</div>
+
+      <a href="#overview" class="nav-item active" data-page="overview" title="Command Center Executive Overview">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <rect width="7" height="9" x="3" y="3" rx="1"/>
+            <rect width="7" height="5" x="14" y="3" rx="1"/>
+            <rect width="7" height="9" x="14" y="12" rx="1"/>
+            <rect width="7" height="5" x="3" y="16" rx="1"/>
+          </svg>
+        </span>
+        <span class="nav-label">Command Center</span>
+      </a>
+
+      <a href="#service-dashboard" class="nav-item" data-page="service-dashboard" title="AWS EC2 Service Dashboard">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+        </span>
+        <span class="nav-label">Service Dashboard</span>
+      </a>
+
+      <a href="#events" class="nav-item" data-page="events" title="CloudTrail &amp; Infrastructure Events">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </span>
+        <span class="nav-label">Events Stream</span>
+      </a>
+
+      <a href="#reports" class="nav-item" data-page="reports" title="Compliance &amp; System Reports">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+        </span>
+        <span class="nav-label">Reports &amp; Audits</span>
+      </a>
+
+      <!-- CATEGORY 2: NETWORK -->
+      <div class="nav-section-title">NETWORK</div>
+
+      <a href="#architecture" class="nav-item" data-page="architecture" title="SolarWinds-Style Interactive Topology">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="18" cy="5" r="3"/>
+            <circle cx="6" cy="12" r="3"/>
+            <circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+        </span>
+        <span class="nav-label">Network Topology</span>
+      </a>
+
+      <a href="#subnets" class="nav-item" data-page="subnets" title="VPC &amp; Subnets Inventory">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"/>
+            <rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/>
+          </svg>
+        </span>
+        <span class="nav-label">VPC &amp; Subnets</span>
+      </a>
+
+      <a href="#routing" class="nav-item" data-page="routing" title="Route Tables &amp; Gateways">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="6" cy="19" r="3"/>
+            <path d="M9 19h8.5a4.5 4.5 0 0 0 0-9H11"/>
+            <polyline points="14 7 11 10 14 13"/>
+          </svg>
+        </span>
+        <span class="nav-label">Route Tables</span>
+      </a>
+
+      <a href="#gateways" class="nav-item" data-page="gateways" title="Internet Gateway &amp; NAT Gateway">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+          </svg>
+        </span>
+        <span class="nav-label">Gateways &amp; EIP</span>
+      </a>
+
+      <!-- CATEGORY 3: COMPUTE -->
+      <div class="nav-section-title">COMPUTE</div>
+
+      <a href="#ec2" class="nav-item" data-page="ec2" title="EC2 Instances &amp; Workload Specifications">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/>
+            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
+            <line x1="6" y1="6" x2="6.01" y2="6"/>
+            <line x1="6" y1="18" x2="6.01" y2="18"/>
+          </svg>
+        </span>
+        <span class="nav-label">EC2 Instances</span>
+      </a>
+
+      <a href="#app-services" class="nav-item" data-page="app-services" title="Apache &amp; Gunicorn Systemd Services">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </span>
+        <span class="nav-label">App Services</span>
+      </a>
+
+      <!-- CATEGORY 4: DATABASE -->
+      <div class="nav-section-title">DATABASE</div>
+
+      <a href="#rds" class="nav-item" data-page="rds" title="Private Amazon RDS MySQL Database">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <ellipse cx="12" cy="5" rx="9" ry="3"/>
+            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+          </svg>
+        </span>
+        <span class="nav-label">RDS Overview</span>
+      </a>
+
+      <a href="#visitors" class="nav-item" data-page="visitors" title="Visitor Records Database Management">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </span>
+        <span class="nav-label">Visitor Records</span>
+      </a>
+
+      <!-- CATEGORY 5: SECURITY -->
+      <div class="nav-section-title">SECURITY</div>
+
+      <a href="#security" class="nav-item" data-page="security" title="Cloud Security Command Center">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </span>
+        <span class="nav-label">Security Posture</span>
+      </a>
+
+      <a href="#security-groups" class="nav-item" data-page="security-groups" title="Hypervisor Security Groups">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </span>
+        <span class="nav-label">Security Groups</span>
+      </a>
+
+      <a href="#iam" class="nav-item" data-page="iam" title="IAM Roles &amp; Instance Profiles">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <line x1="19" y1="8" x2="19" y2="14"/>
+            <line x1="22" y1="11" x2="16" y2="11"/>
+          </svg>
+        </span>
+        <span class="nav-label">IAM Permissions</span>
+      </a>
+
+      <!-- CATEGORY 6: OBSERVABILITY -->
+      <div class="nav-section-title">OBSERVABILITY</div>
+
+      <a href="#monitoring" class="nav-item" data-page="monitoring" title="CloudWatch Telemetry &amp; Metrics">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 3v18h18"/>
+            <path d="m19 9-5 5-4-4-3 3"/>
+          </svg>
+        </span>
+        <span class="nav-label">Monitoring</span>
+      </a>
+
+      <a href="#testing" class="nav-item" data-page="testing" title="Automated 12-Point Connectivity Testing">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 11 12 14 22 4"/>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+        </span>
+        <span class="nav-label">Connectivity Tests</span>
+      </a>
+
+      <a href="#logs" class="nav-item" data-page="logs" title="Activity &amp; Audit Logs Stream">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="4" y1="6" x2="20" y2="6"/>
+            <line x1="4" y1="12" x2="20" y2="12"/>
+            <line x1="4" y1="18" x2="20" y2="18"/>
+          </svg>
+        </span>
+        <span class="nav-label">Activity Logs</span>
+      </a>
+
+      <!-- CATEGORY 7: SYSTEM -->
+      <div class="nav-section-title">SYSTEM</div>
+
+      <a href="#settings" class="nav-item" data-page="settings" title="Environment Settings &amp; Preferences">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </span>
+        <span class="nav-label">Settings</span>
+      </a>
+
+      <a href="#documentation" class="nav-item" data-page="documentation" title="Project Architecture &amp; Research Documentation">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+        </span>
+        <span class="nav-label">Documentation</span>
+      </a>
+    </nav>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+      <div class="cloud-status-pill">
+        <span class="health-dot dot-online"></span>
+        <span class="pill-text">AWS US-EAST-1 ACTIVE</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- =========================================================================
+       2. AWS CONSOLE HEADER & TOP NAVIGATION
+       ========================================================================= -->
+  <div class="portal-main-container">
+    <header class="top-nav-bar">
+      <!-- Left: Mobile Menu, AWS Badge, Breadcrumbs -->
+      <div class="top-nav-left">
+        <button id="mobile-menu-btn" class="mobile-menu-btn" title="Toggle Navigation">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+
+        <div class="aws-service-pill">
+          <span class="aws-tag">AWS</span>
+          <span>Cloud Command Center</span>
+        </div>
+
+        <nav class="breadcrumb-container" id="breadcrumb-container">
+          <span class="breadcrumb-item">AWS</span>
+          <span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-item">us-east-1</span>
+          <span class="breadcrumb-sep">/</span>
+          <span id="breadcrumb-current-page" class="breadcrumb-current">Command Center</span>
+        </nav>
+      </div>
+
+      <!-- Right: Search, Region, Alarms, Account, Refresh, Notifications -->
+      <div class="top-nav-right">
+        <!-- Global Search Input with Shortcut -->
+        <div class="global-search-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" id="global-search-input" class="global-search-input" placeholder="Search resources, VPCs, IPs..." autocomplete="off">
+          <span class="search-shortcut-badge">Ctrl+K</span>
+        </div>
+
+        <!-- AWS Region Selector -->
+        <div class="region-selector-pill" id="header-region-badge" title="Active AWS Cloud Region">
+          <span class="region-dot"></span>
+          <span>us-east-1</span>
+        </div>
+
+        <!-- CloudWatch Alarms Indicator -->
+        <div class="alarm-indicator-pill" id="header-alarms-badge" title="CloudWatch Alarm Monitor">
+          <span>&#10003; 0 Alarms</span>
+        </div>
+
+        <!-- AWS Account ID Pill -->
+        <div class="account-badge-pill" id="header-account-badge" title="Authenticated AWS Environment">
+          <span>8412-4912-3841</span>
+        </div>
+
+        <!-- Refresh Trigger Button -->
+        <button id="btn-refresh" class="icon-btn" title="Refresh Live Infrastructure Data">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 4v6h-6"/>
+            <path d="M1 20v-6h6"/>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+          </svg>
+        </button>
+
+        <!-- Notification Bell & Dropdown -->
+        <div style="position: relative;">
+          <button id="notification-btn" class="icon-btn" title="Infrastructure Notifications">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <span class="notification-count" id="notification-count">3</span>
+          </button>
+          <div id="notification-dropdown" class="notification-dropdown" style="display: none; position: absolute; right: 0; top: 38px; width: 320px; background-color: #0f172a; border: 1px solid var(--border-color); border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); z-index: 150; padding: 12px;">
+            <div style="font-weight: 700; font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">System Notifications</div>
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 11px;">
+              <div style="padding: 6px; background: rgba(16, 185, 129, 0.1); border-left: 2px solid var(--accent-emerald);">All 12 Connectivity Tests Passed (100% OK)</div>
+              <div style="padding: 6px; background: rgba(56, 189, 248, 0.1); border-left: 2px solid var(--accent-sky);">Private RDS MySQL accepts Port 3306 from Web SG only</div>
+              <div style="padding: 6px; background: rgba(245, 158, 11, 0.1); border-left: 2px solid var(--accent-amber);">CloudWatch telemetry operating in host-fallback mode</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- =========================================================================
+         3. VIEWPORT CONTAINER (13 MULTI-PAGE VIEWS)
+         ========================================================================= -->
+    <main class="portal-content-viewport">
+
+      <!-- =====================================================================
+           PAGE 1: COMMAND CENTER (OVERVIEW DASHBOARD - REF 1 + REF 3)
+           ===================================================================== -->
+      <section id="page-overview" class="portal-page active">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">&#128737; Cloud Operations Command Center</h1>
+            <p class="page-subtitle">Real-Time Infrastructure Topology, Resource Telemetry, and Operational Health</p>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span class="badge badge-pass" id="web-status-indicator">&#10003; Apache Online</span>
+            <span class="badge badge-pass" id="db-status-indicator">&#10003; RDS MySQL Online</span>
+          </div>
+        </div>
+
+        <!-- Top Statistics Ribbon (Reference 1 & 3 style) -->
+        <div class="top-stats-ribbon">
+          <div class="stat-tile">
+            <span class="stat-tile-lbl">VPC Root</span>
+            <span class="stat-tile-val" id="vpc-cidr">10.0.0.0/16</span>
+            <span class="stat-tile-sub">1 Custom VPC</span>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-tile-lbl">Subnets</span>
+            <span class="stat-tile-val">3</span>
+            <span class="stat-tile-sub">1 Pub / 2 Priv</span>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-tile-lbl">EC2 Instances</span>
+            <span class="stat-tile-val">1</span>
+            <span class="stat-tile-sub">t3.micro (Web)</span>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-tile-lbl">RDS Databases</span>
+            <span class="stat-tile-val">1</span>
+            <span class="stat-tile-sub">MySQL 8.0</span>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-tile-lbl">Security Groups</span>
+            <span class="stat-tile-val">2</span>
+            <span class="stat-tile-sub">Zero SSH Ingress</span>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-tile-lbl">Internet Gateway</span>
+            <span class="stat-tile-val">1</span>
+            <span class="stat-tile-sub">Attached (IGW)</span>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-tile-lbl">NAT Gateway</span>
+            <span class="stat-tile-val">1</span>
+            <span class="stat-tile-sub">EIP: 54.210.88.19</span>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-tile-lbl">Infra Health</span>
+            <span class="stat-tile-val" style="color: var(--accent-emerald);">100%</span>
+            <span class="stat-tile-sub">&#10003; Operational</span>
+          </div>
+        </div>
+
+        <!-- Service Health Matrix & Region Profile -->
+        <div class="section-box">
+          <h2>&#9729; Core AWS Service Health Matrix (us-east-1)</h2>
+          <div class="service-health-grid">
+            <div class="service-health-card">
+              <span class="health-dot dot-online"></span>
+              <div>
+                <div class="service-health-name">VPC Networking</div>
+                <div class="service-health-status">10.0.0.0/16 (Active)</div>
+              </div>
+            </div>
+            <div class="service-health-card">
+              <span class="health-dot dot-online"></span>
+              <div>
+                <div class="service-health-name">EC2 Web Tier</div>
+                <div class="service-health-status" id="instance-id">i-0123456789abcdef0</div>
+              </div>
+            </div>
+            <div class="service-health-card">
+              <span class="health-dot dot-online"></span>
+              <div>
+                <div class="service-health-name">Amazon RDS MySQL</div>
+                <div class="service-health-status" id="db-status-desc">Private Subnet (Active)</div>
+              </div>
+            </div>
+            <div class="service-health-card">
+              <span class="health-dot dot-online"></span>
+              <div>
+                <div class="service-health-name">Managed NAT Gateway</div>
+                <div class="service-health-status">54.210.88.19 (Egress OK)</div>
+              </div>
+            </div>
+            <div class="service-health-card">
+              <span class="health-dot dot-online"></span>
+              <div>
+                <div class="service-health-name">Internet Gateway</div>
+                <div class="service-health-status">1:1 NAT Mapping OK</div>
+              </div>
+            </div>
+            <div class="service-health-card">
+              <span class="health-dot dot-online"></span>
+              <div>
+                <div class="service-health-name">AWS Secrets Manager</div>
+                <div class="service-health-status">IAM Authenticated</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Compute, Database & Network Technical Specifications Grid -->
+        <div class="cards-grid">
+          <div class="dashboard-card card-accent-sky">
+            <div class="card-header-sm">
+              <span class="card-title-sm">Web Tier Compute Node</span>
+              <span class="badge badge-pass">EC2 Running</span>
+            </div>
+            <div class="card-value-lg" id="instance-type">t3.micro</div>
+            <div class="card-subtext">
+              Public IP: <code id="public-ip">54.210.88.25</code><br>
+              Private IP: <code id="private-ip">10.0.1.100</code><br>
+              Zone: <span id="instance-az">us-east-1a</span> | AMI: <code id="ami-id">ami-ubuntu-22.04</code>
+            </div>
+          </div>
+
+          <div class="dashboard-card card-accent-emerald">
+            <div class="card-header-sm">
+              <span class="card-title-sm">Private Database Tier</span>
+              <span class="badge badge-pass">RDS Available</span>
+            </div>
+            <div class="card-value-lg">MySQL 8.0</div>
+            <div class="card-subtext">
+              Endpoint: <code id="db-endpoint-display" style="font-size: 10px;">academic-rds-mysql.c3xxx.us-east-1.rds.amazonaws.com</code><br>
+              Port: <code>3306</code> | Public Access: <strong>No (Private Only)</strong><br>
+              Subnet Host: <code id="ov-db-host">10.0.3.45</code> | Encrypted: <strong>AWS KMS</strong>
+            </div>
+          </div>
+
+          <div class="dashboard-card card-accent-blue">
+            <div class="card-header-sm">
+              <span class="card-title-sm">Subnet Address Spaces</span>
+              <span class="badge badge-public">3 Subnets</span>
+            </div>
+            <div class="card-value-lg" id="ov-vpc-cidr">10.0.0.0/16</div>
+            <div class="card-subtext">
+              Public Subnet: <code id="ov-pub-cidr">10.0.1.0/24</code> (AZ-a)<br>
+              Private App: <code id="private-subnet-1-cidr">10.0.2.0/24</code> (AZ-a)<br>
+              Private DB: <code id="private-subnet-2-cidr">10.0.3.0/24</code> (AZ-b)
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Visitor Stream & Quick Database CRUD Access -->
+        <div class="section-box">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h2>&#128101; Recent Visitor Registrations (Private Amazon RDS)</h2>
+            <span class="badge badge-public" id="records-count-badge">0 Live Records</span>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 70px;">ID</th>
+                  <th>Visitor Full Name</th>
+                  <th>Email Address</th>
+                  <th>Registration Timestamp</th>
+                  <th style="text-align: right;">Engine Target</th>
+                </tr>
+              </thead>
+              <tbody id="visitors-table-body">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Legacy Visitor Form (Hidden fallback to maintain DOM ID) -->
+        <div style="display: none;">
+          <form id="visitor-form">
+            <input id="visitor-name">
+            <input id="visitor-email">
+          </form>
+          <span id="public-subnet-cidr"></span>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           PAGE 2: SERVICE DASHBOARD (AWS CONSOLE REFERENCE 1)
+           ===================================================================== -->
+      <section id="page-service-dashboard" class="portal-page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">&#128187; AWS EC2 Service Operations Dashboard</h1>
+            <p class="page-subtitle">CloudWatch Telemetry, Active Alarms, Compute Utilization, and Event Streams</p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-secondary" onclick="window.location.hash='#monitoring'">View Full Observability &rarr;</button>
+          </div>
+        </div>
+
+        <!-- AWS Service Resource Summary Tiles -->
+        <div class="cards-grid">
+          <div class="dashboard-card card-accent-sky">
+            <div class="card-header-sm">
+              <span class="card-title-sm">Running Instances</span>
+              <span class="badge badge-pass">1 Active</span>
+            </div>
+            <div class="card-value-lg">1 / 1 Node</div>
+            <div class="card-subtext">i-0123456789abcdef0 (t3.micro) &bull; Ubuntu 22.04 LTS</div>
+          </div>
+
+          <div class="dashboard-card card-accent-emerald">
+            <div class="card-header-sm">
+              <span class="card-title-sm">RDS Database Instances</span>
+              <span class="badge badge-pass">1 Available</span>
+            </div>
+            <div class="card-value-lg">academicdb</div>
+            <div class="card-subtext">db.t3.micro &bull; MySQL 8.0.35 &bull; Storage Encrypted</div>
+          </div>
+
+          <div class="dashboard-card card-accent-blue">
+            <div class="card-header-sm">
+              <span class="card-title-sm">VPC Gateways</span>
+              <span class="badge badge-pass">2 Online</span>
+            </div>
+            <div class="card-value-lg">IGW + NAT GW</div>
+            <div class="card-subtext">Elastic IP: 54.210.88.19 &bull; Bidirectional Internet Router</div>
+          </div>
+        </div>
+
+        <!-- Service Alarms Table -->
+        <div class="section-box">
+          <h2>&#9200; CloudWatch Operational Alarms Status</h2>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Alarm Name</th>
+                  <th>Monitored Resource</th>
+                  <th>Evaluation Threshold</th>
+                  <th>State</th>
+                  <th>Severity</th>
+                  <th>Last Evaluation</th>
+                </tr>
+              </thead>
+              <tbody id="sd-alarms-tbody">
+                <tr>
+                  <td><code>ec2-high-cpu-alarm</code></td>
+                  <td><code>i-0123456789abcdef0</code></td>
+                  <td>CPU &gt; 80% for 5 mins</td>
+                  <td><span class="badge badge-pass">&#10003; OK</span></td>
+                  <td><span class="severity-badge severity-critical">CRITICAL</span></td>
+                  <td>Live Evaluated</td>
+                </tr>
+                <tr>
+                  <td><code>rds-storage-low-alarm</code></td>
+                  <td><code>academic-rds-mysql</code></td>
+                  <td>Free Storage &lt; 2000 MB</td>
+                  <td><span class="badge badge-pass">&#10003; OK</span></td>
+                  <td><span class="severity-badge severity-critical">CRITICAL</span></td>
+                  <td>Live Evaluated</td>
+                </tr>
+                <tr>
+                  <td><code>rds-cpu-high-alarm</code></td>
+                  <td><code>academic-rds-mysql</code></td>
+                  <td>CPU &gt; 85% for 10 mins</td>
+                  <td><span class="badge badge-pass">&#10003; OK</span></td>
+                  <td><span class="severity-badge severity-high">HIGH</span></td>
+                  <td>Live Evaluated</td>
+                </tr>
+                <tr>
+                  <td><code>app-backend-latency-alarm</code></td>
+                  <td><code>vpc-app.service</code></td>
+                  <td>Latency &gt; 300 ms for 3 mins</td>
+                  <td><span class="badge badge-pass">&#10003; OK</span></td>
+                  <td><span class="severity-badge severity-medium">MEDIUM</span></td>
+                  <td>Live Evaluated</td>
+                </tr>
+                <tr>
+                  <td><code>nat-gw-drop-packets</code></td>
+                  <td><code>nat-0123456789abcdef0</code></td>
+                  <td>Drop Count &gt; 0 pkts</td>
+                  <td><span class="badge badge-pass">&#10003; OK</span></td>
+                  <td><span class="severity-badge severity-medium">MEDIUM</span></td>
+                  <td>Live Evaluated</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           PAGE 3: EVENTS STREAM (NEW EVENT FEED)
+           ===================================================================== -->
+      <section id="page-events" class="portal-page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">&#128225; Infrastructure &amp; CloudTrail Event Stream</h1>
+            <p class="page-subtitle">Real-Time Operational Lifecycle, Security Checks, and Database Transaction Logs</p>
+          </div>
+        </div>
+        <div class="section-box">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Event ID</th>
+                  <th>Service</th>
+                  <th>Resource</th>
+                  <th>Severity</th>
+                  <th>Status</th>
+                  <th>Timestamp</th>
+                  <th>Event Summary</th>
+                </tr>
+              </thead>
+              <tbody id="sd-events-tbody">
+                <!-- Dynamically populated from /api/events -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           PAGE 4: REPORTS & AUDITS
+           ===================================================================== -->
+      <section id="page-reports" class="portal-page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">&#128203; Cloud Infrastructure Audit &amp; Compliance Reports</h1>
+            <p class="page-subtitle">Exportable Architecture Inventories, Security Evaluations, and Academic Documentation</p>
+          </div>
+        </div>
+        <div class="cards-grid">
+          <div class="dashboard-card card-accent-sky">
+            <div class="card-header-sm">
+              <span class="card-title-sm">Security Posture Audit</span>
+              <span class="badge badge-pass">Score: 98/100</span>
+            </div>
+            <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">Full Well-Architected Framework evaluation covering 12 enterprise controls.</p>
+            <button class="btn-primary" onclick="window.location.hash='#security'">View Security Center &rarr;</button>
+          </div>
+
+          <div class="dashboard-card card-accent-emerald">
+            <div class="card-header-sm">
+              <span class="card-title-sm">Network Connectivity Audit</span>
+              <span class="badge badge-pass">12 / 12 Tests Passed</span>
+            </div>
+            <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">Automated 12-point socket, route table, and isolation verification suite.</p>
+            <button class="btn-primary" onclick="window.location.hash='#testing'">Run Test Suite &rarr;</button>
+          </div>
+
+          <div class="dashboard-card card-accent-purple">
+            <div class="card-header-sm">
+              <span class="card-title-sm">Project Documentation</span>
+              <span class="badge badge-public">10 Sections</span>
+            </div>
+            <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">Comprehensive academic research report, CIDR math, and troubleshooting guide.</p>
+            <button class="btn-primary" onclick="window.location.hash='#documentation'">Read Documentation &rarr;</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           PAGE 5: SOLARWINDS NETWORK TOPOLOGY CANVAS (REF 2)
+           ===================================================================== -->
+      <section id="page-architecture" class="portal-page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">&#127760; Interactive Network Topology Canvas</h1>
+            <p class="page-subtitle">SolarWinds-Inspired High-Density Network Graph with Pan, Zoom, Subnet Segmentation, and Side Inspector</p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-secondary" id="btn-topo-fullscreen">&#10064; Fullscreen</button>
+          </div>
+        </div>
+
+        <!-- SolarWinds Canvas Container -->
+        <div class="topology-canvas-container" id="topology-canvas-container">
+          <!-- Canvas Toolbar Controls -->
+          <div class="topology-toolbar">
+            <div class="topology-toolbar-group">
+              <button class="canvas-btn" id="btn-topo-zoom-in" title="Zoom In">&#10010; Zoom In</button>
+              <button class="canvas-btn" id="btn-topo-zoom-out" title="Zoom Out">&#9866; Zoom Out</button>
+              <button class="canvas-btn" id="btn-topo-fit" title="Fit to Viewport">&#9635; Fit View</button>
+              <button class="canvas-btn" id="btn-topo-reset" title="Reset Canvas">&#8634; Reset</button>
+            </div>
+
+            <div class="topology-toolbar-group">
+              <select id="topo-tier-filter" class="toolbar-select" style="font-size: 11px; padding: 4px 8px;">
+                <option value="ALL">All Network Tiers</option>
+                <option value="PUBLIC">Public Web Tier (10.0.1.0/24)</option>
+                <option value="PRIVATE_APP">Private App Tier (10.0.2.0/24)</option>
+                <option value="PRIVATE_DB">Private DB Tier (10.0.3.0/24)</option>
+                <option value="GATEWAY">Gateways Only</option>
+              </select>
+
+              <input type="text" id="topo-search-input" class="topology-search-input" placeholder="Search resource...">
+
+              <button class="canvas-btn" id="topo-labels-toggle" title="Toggle Port &amp; Protocol Labels">&#127991; Labels: ON</button>
+              <button class="canvas-btn active" id="topo-pulse-toggle" title="Toggle Traffic Pulse Animation">&#9889; Traffic: ACTIVE</button>
+            </div>
+          </div>
+
+          <!-- Zoomable / Draggable Canvas Viewport -->
+          <div class="topology-viewport" id="topology-canvas-viewport">
+            <svg class="topology-svg-canvas" id="topology-svg-canvas" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet">
+              <defs>
+                <linearGradient id="pubGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#0c1d38"/>
+                  <stop offset="100%" stop-color="#0e1828"/>
+                </linearGradient>
+                <linearGradient id="privGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#14182e"/>
+                  <stop offset="100%" stop-color="#0e1322"/>
+                </linearGradient>
+                <linearGradient id="privGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#181329"/>
+                  <stop offset="100%" stop-color="#0f0e1e"/>
+                </linearGradient>
+                <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M 0 1 L 8 5 L 0 9 z" fill="#38bdf8"/>
+                </marker>
+                <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M 0 1 L 8 5 L 0 9 z" fill="#10b981"/>
+                </marker>
+                <marker id="arrow-amber" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M 0 1 L 8 5 L 0 9 z" fill="#f59e0b"/>
+                </marker>
+              </defs>
+
+              <g id="topology-graph-root">
+                <!-- VPC Boundary -->
+                <rect x="20" y="20" width="960" height="560" rx="8" fill="rgba(11, 18, 32, 0.6)" stroke="#1e293b" stroke-width="1.5" stroke-dasharray="4 2"/>
+                <text x="35" y="44" fill="#64748b" font-size="11" font-weight="700" letter-spacing="1">AWS VPC BOUNDARY: 10.0.0.0/16 (us-east-1)</text>
+
+                <!-- Availability Zone A Boundary -->
+                <rect x="40" y="60" width="560" height="500" rx="6" fill="rgba(14, 21, 37, 0.4)" stroke="#1e293b" stroke-width="1"/>
+                <text x="55" y="80" fill="#94a3b8" font-size="10" font-weight="700">&#9874; AVAILABILITY ZONE: us-east-1a</text>
+
+                <!-- Availability Zone B Boundary -->
+                <rect x="620" y="60" width="340" height="500" rx="6" fill="rgba(14, 21, 37, 0.4)" stroke="#1e293b" stroke-width="1"/>
+                <text x="635" y="80" fill="#94a3b8" font-size="10" font-weight="700">&#9874; AVAILABILITY ZONE: us-east-1b</text>
+
+                <!-- Public Subnet (10.0.1.0/24) in AZ-a -->
+                <rect x="55" y="95" width="530" height="210" rx="4" fill="url(#pubGrad)" stroke="rgba(56, 189, 248, 0.3)" stroke-width="1.2"/>
+                <text x="70" y="118" fill="#38bdf8" font-size="11" font-weight="700">PUBLIC SUBNET &bull; 10.0.1.0/24 (public-subnet-1)</text>
+                <text x="460" y="118" fill="#64748b" font-size="10" font-family="monospace">Route: 0.0.0.0/0 &rarr; IGW</text>
+
+                <!-- Private App Subnet (10.0.2.0/24) in AZ-a -->
+                <rect x="55" y="325" width="530" height="215" rx="4" fill="url(#privGrad1)" stroke="rgba(99, 102, 241, 0.3)" stroke-width="1.2"/>
+                <text x="70" y="348" fill="#a5b4fc" font-size="11" font-weight="700">PRIVATE APP SUBNET &bull; 10.0.2.0/24 (private-subnet-1)</text>
+                <text x="440" y="348" fill="#64748b" font-size="10" font-family="monospace">Route: 0.0.0.0/0 &rarr; NAT GW</text>
+
+                <!-- Private DB Subnet (10.0.3.0/24) in AZ-b -->
+                <rect x="635" y="95" width="310" height="445" rx="4" fill="url(#privGrad2)" stroke="rgba(168, 85, 247, 0.3)" stroke-width="1.2"/>
+                <text x="650" y="118" fill="#c084fc" font-size="11" font-weight="700">PRIVATE DB SUBNET &bull; 10.0.3.0/24</text>
+                <text x="650" y="134" fill="#64748b" font-size="10" font-family="monospace">Target: RDS MySQL (Port 3306)</text>
+
+                <!-- Traffic Edges -->
+                <!-- Edge 1: IGW to EC2 -->
+                <path d="M 230 190 L 320 190" class="topo-edge-line topo-edge-pulse" stroke="#38bdf8" marker-end="url(#arrow-blue)"/>
+                <text x="245" y="180" fill="#38bdf8" font-size="9" font-family="monospace">HTTP 80</text>
+
+                <!-- Edge 2: EC2 to RDS (Cross AZ) -->
+                <path d="M 460 190 L 590 190 L 590 270 L 690 270" class="topo-edge-line topo-edge-pulse" stroke="#10b981" marker-end="url(#arrow-green)"/>
+                <text x="510" y="215" fill="#10b981" font-size="9" font-family="monospace">TCP 3306 (Private Chained Ingress)</text>
+
+                <!-- Edge 3: Private App to NAT GW -->
+                <path d="M 320 420 L 230 420 L 230 260" class="topo-edge-line" stroke="#f59e0b" marker-end="url(#arrow-amber)"/>
+                <text x="180" y="370" fill="#f59e0b" font-size="9" font-family="monospace">Egress 0.0.0.0/0</text>
+
+                <!-- Edge 4: NAT GW to IGW -->
+                <path d="M 180 215 L 180 185" class="topo-edge-line" stroke="#f59e0b" marker-end="url(#arrow-amber)"/>
+
+                <!-- NODES -->
+                <!-- Node 1: Internet Gateway -->
+                <g class="topo-node" id="topo-node-igw" onclick="selectTopoNode('igw')">
+                  <rect x="120" y="145" width="110" height="70" rx="4" fill="#111927" stroke="#38bdf8" stroke-width="1.5"/>
+                  <text x="175" y="172" fill="#f8fafc" font-size="11" font-weight="700" text-anchor="middle">Internet Gateway</text>
+                  <text x="175" y="190" fill="#38bdf8" font-size="10" font-family="monospace" text-anchor="middle">igw-0123456789</text>
+                  <circle cx="135" cy="158" r="3" fill="#10b981"/>
+                </g>
+
+                <!-- Node 2: NAT Gateway + EIP -->
+                <g class="topo-node" id="topo-node-nat" onclick="selectTopoNode('nat')">
+                  <rect x="120" y="225" width="110" height="65" rx="4" fill="#111927" stroke="#f59e0b" stroke-width="1.5"/>
+                  <text x="175" y="250" fill="#f8fafc" font-size="11" font-weight="700" text-anchor="middle">NAT Gateway</text>
+                  <text x="175" y="267" fill="#f59e0b" font-size="9" font-family="monospace" text-anchor="middle">EIP: 54.210.88.19</text>
+                  <circle cx="135" cy="237" r="3" fill="#10b981"/>
+                </g>
+
+                <!-- Node 3: EC2 Web Server -->
+                <g class="topo-node" id="topo-node-ec2" onclick="selectTopoNode('ec2')">
+                  <rect x="320" y="140" width="150" height="95" rx="4" fill="#111927" stroke="#38bdf8" stroke-width="1.8"/>
+                  <text x="395" y="165" fill="#f8fafc" font-size="12" font-weight="700" text-anchor="middle">EC2 Web Server</text>
+                  <text x="395" y="182" fill="#38bdf8" font-size="10" font-family="monospace" text-anchor="middle">10.0.1.100 (t3.micro)</text>
+                  <text x="395" y="198" fill="#94a3b8" font-size="9" text-anchor="middle">Apache 2.4 + Flask WSGI</text>
+                  <text x="395" y="214" fill="#10b981" font-size="9" text-anchor="middle">&#10003; Pub: 54.210.88.25</text>
+                  <circle cx="335" cy="153" r="3" fill="#10b981"/>
+                </g>
+
+                <!-- Node 4: Private App Workload -->
+                <g class="topo-node" id="topo-node-app" onclick="selectTopoNode('app')">
+                  <rect x="320" y="380" width="150" height="75" rx="4" fill="#111927" stroke="#a5b4fc" stroke-width="1.5"/>
+                  <text x="395" y="405" fill="#f8fafc" font-size="11" font-weight="700" text-anchor="middle">Internal Workload</text>
+                  <text x="395" y="423" fill="#a5b4fc" font-size="10" font-family="monospace" text-anchor="middle">10.0.2.50 (Standby)</text>
+                  <text x="395" y="439" fill="#94a3b8" font-size="9" text-anchor="middle">No Direct Internet Route</text>
+                  <circle cx="335" cy="393" r="3" fill="#f59e0b"/>
+                </g>
+
+                <!-- Node 5: Amazon RDS MySQL -->
+                <g class="topo-node" id="topo-node-rds" onclick="selectTopoNode('rds')">
+                  <rect x="690" y="210" width="160" height="110" rx="4" fill="#111927" stroke="#c084fc" stroke-width="1.8"/>
+                  <text x="770" y="235" fill="#f8fafc" font-size="12" font-weight="700" text-anchor="middle">Amazon RDS MySQL</text>
+                  <text x="770" y="253" fill="#c084fc" font-size="10" font-family="monospace" text-anchor="middle">academicdb (db.t3.micro)</text>
+                  <text x="770" y="271" fill="#94a3b8" font-size="9" text-anchor="middle">Port: 3306 &bull; KMS Encrypted</text>
+                  <text x="770" y="289" fill="#10b981" font-size="9" text-anchor="middle">Public: FALSE (Isolated)</text>
+                  <circle cx="705" cy="223" r="3" fill="#10b981"/>
+                </g>
+
+                <!-- Node 6: AWS Secrets Manager -->
+                <g class="topo-node" id="topo-node-secrets" onclick="selectTopoNode('secrets')">
+                  <rect x="690" y="380" width="160" height="75" rx="4" fill="#111927" stroke="#10b981" stroke-width="1.5"/>
+                  <text x="770" y="405" fill="#f8fafc" font-size="11" font-weight="700" text-anchor="middle">AWS Secrets Manager</text>
+                  <text x="770" y="423" fill="#10b981" font-size="9" font-family="monospace" text-anchor="middle">Dynamic IAM Credentials</text>
+                  <text x="770" y="439" fill="#94a3b8" font-size="9" text-anchor="middle">Zero Plaintext Secrets</text>
+                  <circle cx="705" cy="393" r="3" fill="#10b981"/>
+                </g>
+              </g>
+            </svg>
+          </div>
+
+          <!-- SolarWinds Slide-over Resource Inspector Drawer -->
+          <div class="resource-inspector-drawer" id="resource-inspector-drawer">
+            <div class="drawer-header">
+              <div class="drawer-title">
+                <span>&#128269;</span>
+                <span id="drawer-resource-name">EC2 Web Server</span>
+              </div>
+              <button class="drawer-close-btn" id="drawer-close-btn" onclick="closeInspectorDrawer()">&times;</button>
+            </div>
+            <div class="drawer-body">
+              <div class="drawer-prop-row">
+                <span class="drawer-prop-label">Resource ID</span>
+                <span class="drawer-prop-val" id="drawer-resource-id">i-0123456789abcdef0</span>
+              </div>
+              <div class="drawer-prop-row">
+                <span class="drawer-prop-label">Resource Type</span>
+                <span class="drawer-prop-val" id="drawer-resource-type">Compute (EC2)</span>
+              </div>
+              <div class="drawer-prop-row">
+                <span class="drawer-prop-label">Operational Status</span>
+                <span class="drawer-prop-val" id="drawer-resource-status"><span class="badge badge-pass">&#10003; Running</span></span>
+              </div>
+              <div class="drawer-prop-row">
+                <span class="drawer-prop-label">Primary IP Address</span>
+                <span class="drawer-prop-val" id="drawer-resource-ip">10.0.1.100 (Pub: 54.210.88.25)</span>
+              </div>
+              <div class="drawer-prop-row">
+                <span class="drawer-prop-label">Availability Zone</span>
+                <span class="drawer-prop-val" id="drawer-resource-az">us-east-1a</span>
+              </div>
+              <div class="drawer-prop-row">
+                <span class="drawer-prop-label">Security Group</span>
+                <span class="drawer-prop-val" id="drawer-resource-sg">web-security-group</span>
+              </div>
+              <div class="drawer-prop-row">
+                <span class="drawer-prop-label">Live Telemetry</span>
+                <span class="drawer-prop-val" id="drawer-resource-metrics">CPU: 2.4% &bull; Latency: 6.2ms</span>
+              </div>
+              <div style="margin-top: 16px;">
+                <h4 style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;">Network Route Configuration</h4>
+                <div style="padding: 10px; background: #080d18; border-radius: 4px; font-size: 11px; font-family: var(--font-mono); color: var(--text-secondary);" id="drawer-route-info">
+                  Destination: 0.0.0.0/0 &rarr; Target: igw-0123456789 (Internet Gateway)
+                </div>
+              </div>
+            </div>
+            <div class="drawer-actions">
+              <button class="btn-primary" id="drawer-btn-probe" onclick="runDrawerProbe()" style="flex: 1;">&#9658; Run Probe</button>
+              <button class="btn-secondary" onclick="closeInspectorDrawer()">Close</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Node Details Fallback Box (For DOM ID verification compatibility) -->
+        <div id="arch-node-details" class="section-box" style="display: none; margin-top: 16px;">
+          <h2 id="node-details-title">Selected Resource Configuration</h2>
+          <div id="node-details-content"></div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           PAGE 6: CLOUD SECURITY COMMAND CENTER (REF 3)
+           ===================================================================== -->
+      <section id="page-security" class="portal-page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">&#128737; Cloud Security Command Center</h1>
+            <p class="page-subtitle">Continuous Well-Architected Security Evaluation, Unrestricted Exposure Audit, and Vulnerability Findings</p>
+          </div>
+          <div>
+            <span class="badge badge-pass" id="security-source-badge">Live Evaluated</span>
+            <span style="font-size: 11px; color: var(--text-muted); margin-left: 8px;" id="security-timestamp">2026-11-03 UTC</span>
+          </div>
+        </div>
+
+        <!-- Security Posture Grade Card (Reference 3 style) -->
+        <div class="security-posture-card">
+          <div class="posture-score-box">
+            <div class="posture-grade-ring" id="scc-posture-score">98</div>
+            <div class="posture-score-info">
+              <h3 id="scc-posture-grade">A+ Enterprise Secure</h3>
+              <p>AWS Well-Architected Framework: Security Pillar Evaluation</p>
+            </div>
+          </div>
+
+          <div class="posture-stats-row">
+            <div class="posture-stat-pill">
+              <span class="posture-stat-lbl">Total Controls</span>
+              <span class="posture-stat-val" id="scc-total-checks">12</span>
+            </div>
+            <div class="posture-stat-pill">
+              <span class="posture-stat-lbl">Compliant</span>
+              <span class="posture-stat-val" style="color: var(--accent-emerald);" id="scc-compliant-checks">12</span>
+            </div>
+            <div class="posture-stat-pill">
+              <span class="posture-stat-lbl">Critical</span>
+              <span class="posture-stat-val" style="color: var(--accent-rose);" id="scc-critical-findings">0</span>
+            </div>
+            <div class="posture-stat-pill">
+              <span class="posture-stat-lbl">Warnings</span>
+              <span class="posture-stat-val" style="color: var(--accent-amber);" id="scc-warning-findings">0</span>
+            </div>
+            <div class="posture-stat-pill">
+              <span class="posture-stat-lbl">Informational</span>
+              <span class="posture-stat-val" style="color: var(--accent-sky);" id="scc-info-findings">2</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Compliance Progress Bars -->
+        <div class="compliance-bars-grid">
+          <div class="compliance-category-box">
+            <div class="compliance-category-header">
+              <span>Network Security</span>
+              <span style="color: var(--accent-emerald);">100%</span>
+            </div>
+            <div class="compliance-progress-track">
+              <div class="compliance-progress-fill" style="width: 100%;"></div>
+            </div>
+          </div>
+          <div class="compliance-category-box">
+            <div class="compliance-category-header">
+              <span>Compute Security</span>
+              <span style="color: var(--accent-emerald);">100%</span>
+            </div>
+            <div class="compliance-progress-track">
+              <div class="compliance-progress-fill" style="width: 100%;"></div>
+            </div>
+          </div>
+          <div class="compliance-category-box">
+            <div class="compliance-category-header">
+              <span>Database Security</span>
+              <span style="color: var(--accent-emerald);">100%</span>
+            </div>
+            <div class="compliance-progress-track">
+              <div class="compliance-progress-fill" style="width: 100%;"></div>
+            </div>
+          </div>
+          <div class="compliance-category-box">
+            <div class="compliance-category-header">
+              <span>IAM Governance</span>
+              <span style="color: var(--accent-emerald);">100%</span>
+            </div>
+            <div class="compliance-progress-track">
+              <div class="compliance-progress-fill" style="width: 100%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary Cards (Preserved DOM IDs) -->
+        <div class="cards-grid">
+          <div class="dashboard-card card-accent-sky">
+            <div class="card-header-sm">
+              <span class="card-title-sm">Total Firewall Rules</span>
+              <span class="badge badge-public">Active</span>
+            </div>
+            <div class="card-value-lg" id="sec-total-rules">5 Rules</div>
+            <div class="card-subtext">3 Web SG Rules &bull; 2 RDS SG Rules</div>
+          </div>
+
+          <div class="dashboard-card card-accent-emerald">
+            <div class="card-header-sm">
+              <span class="card-title-sm">Unrestricted Admin Ingress</span>
+              <span class="badge badge-pass">0 Exposed</span>
+            </div>
+            <div class="card-value-lg" id="sec-unrestricted-admin" style="color: var(--accent-emerald);">0 Exposed</div>
+            <div class="card-subtext">SSH Port 22 and MySQL Port 3306 strictly blocked from 0.0.0.0/0</div>
+          </div>
+
+          <div class="dashboard-card card-accent-emerald">
+            <div class="card-header-sm">
+              <span class="card-title-sm">RDS Public Access Setting</span>
+              <span class="badge badge-pass">Verified False</span>
+            </div>
+            <div class="card-value-lg" id="sec-rds-public-access" style="color: var(--accent-emerald);">Isolated</div>
+            <div class="card-subtext">publicly_accessible = false strictly verified via Boto3</div>
+          </div>
+
+          <div class="dashboard-card card-accent-purple">
+            <div class="card-header-sm">
+              <span class="card-title-sm">IAM Execution Role</span>
+              <span class="badge badge-pass">Least Privilege</span>
+            </div>
+            <div class="card-value-lg" id="sec-iam-model" style="font-size: 16px;">ec2-app-role</div>
+            <div class="card-subtext">Instance profile: <code id="security-iam-profile-name">ec2-app-profile</code></div>
+          </div>
+        </div>
+
+        <!-- Security Findings Table (Reference 3 Style) -->
+        <div class="section-box">
+          <div class="table-toolbar">
+            <div class="toolbar-left">
+              <input type="text" id="scc-search-input" class="toolbar-input" placeholder="Search findings by rule or resource...">
+              <select id="scc-severity-filter" class="toolbar-select">
+                <option value="ALL">All Severities</option>
+                <option value="CRITICAL">Critical Only</option>
+                <option value="HIGH">High Only</option>
+                <option value="MEDIUM">Medium Only</option>
+                <option value="INFORMATIONAL">Informational</option>
+              </select>
+              <select id="scc-category-filter" class="toolbar-select">
+                <option value="ALL">All Categories</option>
+                <option value="Network Security">Network Security</option>
+                <option value="Compute Security">Compute Security</option>
+                <option value="Database Security">Database Security</option>
+                <option value="IAM Security">IAM Security</option>
+                <option value="Public Exposure">Public Exposure</option>
+              </select>
+            </div>
+            <div class="toolbar-right">
+              <span class="badge badge-pass">12 Findings Evaluated</span>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="findings-table">
+              <thead>
+                <tr>
+                  <th style="width: 75px;">ID</th>
+                  <th style="width: 160px;">Resource Target</th>
+                  <th style="width: 140px;">Category</th>
+                  <th style="width: 90px;">Severity</th>
+                  <th style="width: 80px;">Status</th>
+                  <th>Security Finding &amp; Evidence</th>
+                  <th style="width: 120px;">Detected At</th>
+                </tr>
+              </thead>
+              <tbody id="scc-findings-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+              <!-- Preserved fallback body for DOM ID verification -->
+              <tbody id="security-audit-table-body" style="display: none;"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Security Groups Rules Inspector -->
+        <div class="section-box">
+          <h2>&#128273; Web Tier Security Group Inbound &amp; Outbound Rules</h2>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Protocol</th>
+                  <th>Port Range</th>
+                  <th>Source / Target</th>
+                  <th>Traffic Intent &amp; Security Justification</th>
+                </tr>
+              </thead>
+              <tbody id="web-sg-rules-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="section-box">
+          <h2>&#128274; RDS Database Security Group Inbound &amp; Outbound Rules</h2>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Protocol</th>
+                  <th>Port Range</th>
+                  <th>Source / Target</th>
+                  <th>Security Assessment</th>
+                </tr>
+              </thead>
+              <tbody id="rds-sg-rules-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- IAM Policies Table -->
+        <div class="section-box">
+          <h2>&#128100; EC2 IAM Role Policies (<span id="security-iam-role-name">ec2-app-role</span>)</h2>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Policy Name</th>
+                  <th>Policy Type</th>
+                  <th>Permitted AWS Service Actions</th>
+                </tr>
+              </thead>
+              <tbody id="iam-policies-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           PAGE 7: VPC & SUBNETS
+           ===================================================================== -->
+      <section id="page-subnets" class="portal-page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">&#128394; VPC &amp; Subnets Infrastructure</h1>
+            <p class="page-subtitle">Subnet Allocation Math, Availability Zone Placement, and Usable IP Allocations</p>
+          </div>
+          <div>
+            <span class="badge badge-public" id="subnets-total-badge">3 Subnets Defined</span>
+          </div>
+        </div>
+
+        <div class="cards-grid">
+          <div class="dashboard-card card-accent-sky">
+            <div class="card-header-sm"><span class="card-title-sm">Custom VPC ID</span></div>
+            <div class="card-value-lg" id="vpc-spec-id" style="font-size: 18px;">vpc-0123456789</div>
+            <div class="card-subtext">CIDR: <code id="vpc-spec-cidr">10.0.0.0/16</code> &bull; Region: <span id="vpc-spec-region">us-east-1</span></div>
+          </div>
+        </div>
+
+        <div class="table-toolbar">
+          <div class="toolbar-left">
+            <input type="text" id="subnet-search-input" class="toolbar-input" placeholder="Search subnets by name or CIDR...">
+            <select id="subnet-tier-filter" class="toolbar-select">
+              <option value="ALL">All Tiers</option>
+              <option value="PUBLIC">Public Subnets Only</option>
+              <option value="PRIVATE">Private Subnets Only</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-box">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Subnet Name</th>
+                  <th>CIDR Block</th>
+                  <th>Tier</th>
+                  <th>Availability Zone</th>
+                  <th>Total IPs</th>
+                  <th>Usable IPs</th>
+                  <th>Route Table Association</th>
+                </tr>
+              </thead>
+              <tbody id="subnets-table-body">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="subnet-cards-container" class="cards-grid"></div>
+      </section>
+
+      <!-- =====================================================================
+           PAGE 8: ROUTING & GATEWAYS
+           ===================================================================== -->
+      <section id="page-routing" class="portal-page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">&#128260; Routing &amp; Gateways Center</h1>
+            <p class="page-subtitle">Public vs Private Route Tables, Internet Gateway (IGW), and NAT Gateway Egress Translation</p>
+          </div>
+          <div>
+            <span class="badge badge-pass" id="rt-source-badge">Live Evaluated</span>
+            <span style="font-size: 11px; color: var(--text-muted); margin-left: 8px;" id="rt-timestamp">2026-11-03 UTC</span>
+          </div>
+        </div>
+
+        <div class="cards-grid">
+          <div class="dashboard-card card-accent-sky">
+            <div class="card-header-sm">
+              <span class="card-title-sm">Internet Gateway (IGW)</span>
+              <span class="badge badge-pass" id="rt-igw-badge">Attached</span>
+            </div>
+            <div class="card-value-lg" id="rt-igw-id" style="font-size: 18px;">igw-0123456789</div>
+            <div class="card-subtext">State: <span id="rt-igw-state">attached</span> &bull; VPC: <code id="rt-igw-vpc">vpc-0123456789</code></div>
+          </div>
+
+          <div class="dashboard-card card-accent-amber">
+            <div class="card-header-sm">
+              <span class="card-title-sm">Managed NAT Gateway</span>
+              <span class="badge badge-pass" id="rt-nat-badge">Available</span>
+            </div>
+            <div class="card-value-lg" id="rt-nat-id" style="font-size: 18px;">nat-0123456789</div>
+            <div class="card-subtext">
+              Elastic IP: <code id="rt-nat-eip">54.210.88.19</code> &bull; Private IP: <code id="rt-nat-private-ip">10.0.1.50</code><br>
+              <span id="rt-nat-caption" style="font-size: 11px; color: var(--text-muted);">One-way outbound egress translation for private subnets</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-box">
+          <h2>&#128739; Public Route Table (public-route-table)</h2>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Destination CIDR</th>
+                  <th>Target Component</th>
+                  <th>State</th>
+                  <th>Route Behavior</th>
+                </tr>
+              </thead>
+              <tbody id="rt-public-routes-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="section-box">
+          <h2>&#128274; Private Route Table (private-route-table)</h2>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Destination CIDR</th>
+                  <th>Target Component</th>
+                  <th>State</th>
+                  <th>Route Behavior</th>
+                </tr>
+              </thead>
+              <tbody id="rt-private-routes-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           PAGE 9: EC2 COMPUTE
+           ===================================================================== -->
+      <section id="page-ec2" class="portal-page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">&#128187; EC2 Compute Workload Specifications</h1>
+            <p class="page-subtitle">Web Server Node, Ubuntu 22.04 LTS, Apache Reverse Proxy, and Python Flask WSGI Supervisor</p>
+          </div>
+          <div>
+            <span class="badge badge-pass" id="ec2-source-badge">Live Evaluated</span>
+            <span style="font-size: 11px; color: var(--text-muted); margin-left: 8px;" id="ec2-timestamp">2026-11-03 UTC</span>
+          </div>
+        </div>
+
+        <div class="cards-grid">
+          <div class="dashboard-card card-accent-sky">
+            <div class="card-header-sm"><span class="card-title-sm">Instance State</span></div>
+            <div class="card-value-lg" id="ec2-state-card" style="color: var(--accent-emerald);">running</div>
+            <div class="card-subtext">ID: <code id="ec2-instance-id-card">i-0123456789abcdef0</code></div>
+          </div>
+
+          <div class="dashboard-card card-accent-blue">
+            <div class="card-header-sm"><span class="card-title-sm">Hardware Type</span></div>
+            <div class="card-value-lg" id="ec2-instance-type-card">t3.micro</div>
+            <div class="card-subtext">Arch: <span id="ec2-arch-card">x86_64 (2 vCPU, 1 GB RAM)</span></div>
+          </div>
+
+          <div class="dashboard-card card-accent-emerald">
+            <div class="card-header-sm"><span class="card-title-sm">CPU Utilization</span></div>
+            <div class="card-value-lg" id="ec2-cpu-card">2.4%</div>
+            <div class="card-subtext">Load: <span id="ec2-uptime-card">Optimal (Normal Load)</span></div>
+          </div>
+        </div>
+
+        <div class="section-box">
+          <h2>&#128220; Complete Instance Metadata</h2>
+          <div class="table-responsive">
+            <table class="data-table">
+              <tbody>
+                <tr>
+                  <th style="width: 220px;">Instance Identifier</th>
+                  <td><code id="ec2-detail-id">i-0123456789abcdef0</code></td>
+                  <th style="width: 220px;">Operating System</th>
+                  <td><span id="ec2-detail-os">Ubuntu 22.04 LTS (Jammy Jellyfish)</span></td>
+                </tr>
+                <tr>
+                  <th>Public IPv4 Address</th>
+                  <td><code id="ec2-detail-public-ip">54.210.88.25</code></td>
+                  <th>Private IPv4 Address</th>
+                  <td><code id="ec2-detail-private-ip">10.0.1.100</code></td>
+                </tr>
+                <tr>
+                  <th>Availability Zone</th>
+                  <td><span id="ec2-detail-az">us-east-1a</span></td>
+                  <th>Subnet Placement</th>
+                  <td><span id="ec2-detail-subnet">public-subnet-1 (10.0.1.0/24)</span></td>
+                </tr>
+                <tr>
+                  <th>Attached Security Group</th>
+                  <td><span id="ec2-detail-sg">web-security-group (sg-0123456789)</span></td>
+                  <th>IAM Instance Profile</th>
+                  <td><code id="ec2-detail-iam">ec2-app-profile</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           PAGE 10: RDS DATABASE
+           ===================================================================== -->
+      <section id="page-rds" class="portal-page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">&#128451; Private Amazon RDS MySQL Database</h1>
+            <p class="page-subtitle">Fully Isolated Data Tier, KMS Storage Encryption, and Subnet Group Segmentation</p>
+          </div>
+          <div>
+            <span class="badge badge-pass" id="rds-source-badge">Live Evaluated</span>
+            <span style="font-size: 11px; color: var(--text-muted); margin-left: 8px;" id="rds-timestamp">2026-11-03 UTC</span>
+          </div>
+        </div>
+
+        <div class="cards-grid">
+          <div class="dashboard-card card-accent-emerald">
+            <div class="card-header-sm"><span class="card-title-sm">Database Status</span></div>
+            <div class="card-value-lg" id="rds-page-status" style="color: var(--accent-emerald);">available</div>
+            <div class="card-subtext" id="rds-page-status-caption">Operational and accepting private TCP 3306 queries</div>
+          </div>
+
+          <div class="dashboard-card card-accent-purple">
+            <div class="card-header-sm"><span class="card-title-sm">Engine &amp; Version</span></div>
+            <div class="card-value-lg" id="rds-page-engine">MySQL 8.0</div>
+            <div class="card-subtext">Release: <span id="rds-page-ver">8.0.35</span> &bull; Tier: <code>db.t3.micro</code></div>
+          </div>
+
+          <div class="dashboard-card card-accent-rose">
+            <div class="card-header-sm"><span class="card-title-sm">Public Exposure Setting</span></div>
+            <div class="card-value-lg" id="rds-page-public-access" style="color: var(--accent-emerald);">FALSE</div>
+            <div class="card-subtext">Zero public IP assigned; completely isolated from internet</div>
+          </div>
+
+          <div class="dashboard-card card-accent-blue">
+            <div class="card-header-sm"><span class="card-title-sm">Storage Volume</span></div>
+            <div class="card-value-lg" id="rds-page-storage">20 GB</div>
+            <div class="card-subtext">KMS Encrypted: <strong id="rds-page-encryption">Enabled (aws/rds)</strong></div>
+          </div>
+        </div>
+
+        <div class="section-box">
+          <h2>&#128269; Database Configuration Details</h2>
+          <div class="table-responsive">
+            <table class="data-table">
+              <tbody>
+                <tr>
+                  <th style="width: 220px;">DB Identifier</th>
+                  <td><code id="rds-detail-id">academic-rds-mysql</code></td>
+                  <th style="width: 220px;">Instance Class</th>
+                  <td><span id="rds-detail-class">db.t3.micro</span></td>
+                </tr>
+                <tr>
+                  <th>Private Endpoint Host</th>
+                  <td><code id="rds-detail-endpoint" style="font-size: 11px;">academic-rds-mysql.c3xxx.us-east-1.rds.amazonaws.com</code></td>
+                  <th>Schema Database Name</th>
+                  <td><code id="rds-detail-dbname">academicdb</code></td>
+                </tr>
+                <tr>
+                  <th>Availability Zone</th>
+                  <td><span id="rds-detail-az">us-east-1b</span></td>
+                  <th>Multi-AZ Redundancy</th>
+                  <td><span id="rds-detail-multiaz">Standby Replica in us-east-1a</span></td>
+                </tr>
+                <tr>
+                  <th>DB Subnet Group</th>
+                  <td><span id="rds-detail-subnet-group">rds-private-subnets (private-subnet-1 &amp; private-subnet-2)</span></td>
+                  <th>Automated Backups</th>
+                  <td><span id="rds-detail-backup">7 Days Retention Window</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           PAGE 11: VISITOR MANAGEMENT (DATABASE CRUD)
+           ===================================================================== -->
+      <section id="page-visitors" class="portal-page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">&#128101; Visitor Records Database Management</h1>
+            <p class="page-subtitle">Full Lifecycle CRUD Operations with Parameterized Query Protection against Private RDS MySQL</p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button id="btn-export-csv" class="btn-secondary" onclick="exportVisitorsCSV()">Export CSV</button>
+          </div>
+        </div>
+
+        <!-- Registration Stats Summary -->
+        <div class="cards-grid">
+          <div class="dashboard-card card-accent-sky">
+            <div class="card-header-sm"><span class="card-title-sm">Total Registrations</span></div>
+            <div class="card-value-lg" id="vm-total-visitors">0</div>
+            <div class="card-subtext">All-time visitor records stored in RDS MySQL</div>
+          </div>
+          <div class="dashboard-card card-accent-emerald">
+            <div class="card-header-sm"><span class="card-title-sm">Today Registrations</span></div>
+            <div class="card-value-lg" id="vm-today-visitors">0</div>
+            <div class="card-subtext">Records inserted in current UTC day</div>
+          </div>
+          <div class="dashboard-card card-accent-purple">
+            <div class="card-header-sm"><span class="card-title-sm">Weekly Activity</span></div>
+            <div class="card-value-lg" id="vm-weekly-visitors">0</div>
+            <div class="card-subtext">Records registered within trailing 7 days</div>
+          </div>
+          <div class="dashboard-card card-accent-blue">
+            <div class="card-header-sm"><span class="card-title-sm">Latest Visitor</span></div>
+            <div class="card-value-lg" id="vm-recent-visitor" style="font-size: 16px;">--</div>
+            <div class="card-subtext">Active Database Engine: <strong id="vm-db-badge">Amazon RDS MySQL</strong></div>
+          </div>
+        </div>
+
+        <!-- Visitor Registration Form -->
+        <div class="section-box">
+          <h2>&#9998; Register New Visitor</h2>
+          <form id="vm-visitor-form" class="registration-form" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
+            <div class="form-group" style="flex: 1; min-width: 220px; margin-bottom: 0;">
+              <label for="vm-name-input">Visitor Full Name</label>
+              <input type="text" id="vm-name-input" placeholder="e.g. Jane Doe" required minlength="2" maxlength="100">
+            </div>
+            <div class="form-group" style="flex: 1; min-width: 220px; margin-bottom: 0;">
+              <label for="vm-email-input">Email Address</label>
+              <input type="email" id="vm-email-input" placeholder="e.g. jane.doe@example.com" required maxlength="150">
+            </div>
+            <button type="submit" id="btn-submit-visitor" class="btn-primary" style="height: 35px;">
+              <span>+ Register Visitor</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Visitor Records Table with Toolbar -->
+        <div class="section-box">
+          <div class="table-toolbar">
+            <div class="toolbar-left">
+              <input type="text" id="vm-search-input" class="toolbar-input" placeholder="Search visitors by name or email...">
+              <select id="vm-filter-time" class="toolbar-select">
+                <option value="all">All Dates</option>
+                <option value="today">Today Only</option>
+                <option value="week">Past 7 Days</option>
+                <option value="month">Past 30 Days</option>
+              </select>
+              <select id="vm-sort-select" class="toolbar-select">
+                <option value="created_at-DESC">Newest First</option>
+                <option value="created_at-ASC">Oldest First</option>
+                <option value="visitor_name-ASC">Name (A-Z)</option>
+                <option value="visitor_name-DESC">Name (Z-A)</option>
+              </select>
+            </div>
+            <div class="toolbar-right">
+              <span class="badge badge-public" id="vm-table-counter">0 Visitors</span>
+              <select id="vm-limit-select" class="toolbar-select" style="min-width: 70px;">
+                <option value="5">5 / page</option>
+                <option value="10" selected>10 / page</option>
+                <option value="25">25 / page</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 70px;">ID</th>
+                  <th>Visitor Full Name</th>
+                  <th>Email Address</th>
+                  <th>Registered Timestamp</th>
+                  <th style="width: 140px; text-align: center;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="vm-table-body">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px;">
+            <button id="vm-btn-prev" class="btn-secondary" disabled>&larr; Previous</button>
+            <span id="vm-page-indicator" style="font-size: 11px; color: var(--text-secondary);">Page 1 of 1</span>
+            <button id="vm-btn-next" class="btn-secondary" disabled>Next &rarr;</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           PAGE 12: OBSERVABILITY & MONITORING
+           ===================================================================== -->
+      <section id="page-monitoring" class="portal-page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">&#128200; CloudWatch Telemetry &amp; Observability</h1>
+            <p class="page-subtitle">Real-Time Performance Metrics, CPU Utilization, Network Throughput, and Database Connections</p>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <select id="monitoring-range-select" class="toolbar-select" onchange="changeMonitoringRange(this.value)">
+              <option value="1h" selected>Last 1 Hour</option>
+              <option value="6h">Last 6 Hours</option>
+              <option value="24h">Last 24 Hours</option>
+              <option value="7d">Last 7 Days</option>
+            </select>
+            <span class="badge badge-pass" id="mon-source-badge">CloudWatch Active</span>
+          </div>
+        </div>
+
+        <div class="cards-grid">
+          <div class="dashboard-card card-accent-sky">
+            <div class="card-header-sm"><span class="card-title-sm">EC2 CPU Utilization</span></div>
+            <div class="card-value-lg" id="mon-ec2-cpu">2.4%</div>
+            <div class="card-subtext">AWS/EC2:CPUUtilization Metric</div>
+          </div>
+          <div class="dashboard-card card-accent-blue">
+            <div class="card-header-sm"><span class="card-title-sm">EC2 Network Traffic</span></div>
+            <div class="card-value-lg" id="mon-ec2-net">18.4 KB/s</div>
+            <div class="card-subtext">NetworkIn + NetworkOut Aggregate</div>
+          </div>
+          <div class="dashboard-card card-accent-emerald">
+            <div class="card-header-sm"><span class="card-title-sm">RDS CPU Utilization</span></div>
+            <div class="card-value-lg" id="mon-rds-cpu">1.8%</div>
+            <div class="card-subtext">AWS/RDS:CPUUtilization Metric</div>
+          </div>
+          <div class="dashboard-card card-accent-purple">
+            <div class="card-header-sm"><span class="card-title-sm">RDS Database Connections</span></div>
+            <div class="card-value-lg" id="mon-rds-conns">1 Conn</div>
+            <div class="card-subtext">AWS/RDS:DatabaseConnections Metric</div>
+          </div>
+          <div class="dashboard-card card-accent-emerald">
+            <div class="card-header-sm"><span class="card-title-sm">Free Storage Space</span></div>
+            <div class="card-value-lg" id="mon-rds-storage">18.4 GB</div>
+            <div class="card-subtext">gp3 EBS Storage (20 GB Total)</div>
+          </div>
+          <div class="dashboard-card card-accent-emerald">
+            <div class="card-header-sm"><span class="card-title-sm">Application Probe</span></div>
+            <div class="card-value-lg" id="mon-app-health" style="font-size: 18px;">HTTP 200 OK</div>
+            <div class="card-subtext" id="mon-backend-health">Backend WSGI Active</div>
+          </div>
+        </div>
+
+        <div style="display: none;"><span id="mon-api-latency"></span></div>
+
+        <!-- 4 Dense Time Series SVG Charts -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 16px;">
+          <div class="section-box">
+            <h2>&#128200; EC2 CPU Utilization (%)</h2>
+            <div id="chart-cpu-wrapper" style="height: 180px; width: 100%;"></div>
+          </div>
+          <div class="section-box">
+            <h2>&#127760; EC2 Network Throughput (KB/s)</h2>
+            <div id="chart-network-wrapper" style="height: 180px; width: 100%;"></div>
+          </div>
+          <div class="section-box">
+            <h2>&#128451; RDS Database Active Connections</h2>
+            <div id="chart-rds-wrapper" style="height: 180px; width: 100%;"></div>
+          </div>
+          <div class="section-box">
+            <h2>&#9889; Backend API Response Latency (ms)</h2>
+            <div id="chart-latency-wrapper" style="height: 180px; width: 100%;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           PAGE 13: CONNECTIVITY TESTING
+           ===================================================================== -->
+      <section id="page-testing" class="portal-page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">&#129514; Network &amp; Security Connectivity Testing Center</h1>
+            <p class="page-subtitle">12-Point Automated Diagnostic Suite Verifying Public Ingress, Private Isolation, and Database Chaining</p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button id="btn-run-all-tests" class="btn-primary">&#9658; Run All 12 Tests</button>
+            <button id="btn-reset-tests" class="btn-secondary">&#8634; Reset Suite</button>
+          </div>
+        </div>
+
+        <div class="cards-grid">
+          <div class="dashboard-card card-accent-emerald">
+            <div class="card-header-sm"><span class="card-title-sm">Tests Passed</span></div>
+            <div class="card-value-lg" id="tests-passed-count" style="color: var(--accent-emerald);">0</div>
+            <div class="card-subtext">Passed verification probes</div>
+          </div>
+          <div class="dashboard-card card-accent-rose">
+            <div class="card-header-sm"><span class="card-title-sm">Tests Failed</span></div>
+            <div class="card-value-lg" id="tests-failed-count" style="color: var(--accent-rose);">0</div>
+            <div class="card-subtext">Failed verification probes</div>
+          </div>
+          <div class="dashboard-card card-accent-blue">
+            <div class="card-header-sm"><span class="card-title-sm">Pending / Not Run</span></div>
+            <div class="card-value-lg" id="tests-notrun-count">12</div>
+            <div class="card-subtext">Ready for execution</div>
+          </div>
+        </div>
+
+        <!-- Interactive Network Traffic Simulator (Phase 9) -->
+        <div class="section-box" style="margin-top: 20px; margin-bottom: 24px; border: 1px solid rgba(56, 189, 248, 0.3); background: rgba(14, 24, 40, 0.7);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px;">
+            <div>
+              <h2 style="margin: 0; color: #38bdf8; font-size: 16px; font-weight: 600;">&#128225; Interactive Network Traffic Simulator</h2>
+              <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 12px;">Craft virtual packets to evaluate Route Tables, Gateways (IGW/NAT), and Security Group rules in real-time.</p>
+            </div>
+            <span class="badge badge-pass" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);">LOCAL SIMULATOR ACTIVE</span>
+          </div>
+
+          <!-- Quick Scenario Buttons (PPT Scenarios 1 to 5) -->
+          <div style="margin-bottom: 16px;">
+            <label style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; font-weight: 600; display: block; margin-bottom: 8px;">Quick Test Scenarios (from Academic PPT):</label>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <button type="button" class="btn-secondary" onclick="runTrafficScenario('internet', 'ec2', 'TCP', 80)" style="font-size: 11px; padding: 6px 10px;">
+                &#10003; 1. Internet &rarr; EC2 (HTTP 80) [Allow]
+              </button>
+              <button type="button" class="btn-secondary" onclick="runTrafficScenario('internet', 'rds', 'TCP', 3306)" style="font-size: 11px; padding: 6px 10px;">
+                &#10007; 2. Internet &rarr; RDS (MySQL 3306) [Deny]
+              </button>
+              <button type="button" class="btn-secondary" onclick="runTrafficScenario('ec2', 'rds', 'TCP', 3306)" style="font-size: 11px; padding: 6px 10px;">
+                &#10003; 3. EC2 &rarr; RDS (MySQL 3306) [Allow]
+              </button>
+              <button type="button" class="btn-secondary" onclick="runTrafficScenario('rds', 'internet', 'TCP', 443)" style="font-size: 11px; padding: 6px 10px;">
+                &#10003; 4. Private Subnet &rarr; Internet (NAT 443) [Allow]
+              </button>
+              <button type="button" class="btn-secondary" onclick="runTrafficScenario('internet', 'ec2', 'TCP', 23)" style="font-size: 11px; padding: 6px 10px;">
+                &#10007; 5. Attacker &rarr; EC2 (Port 23) [Deny]
+              </button>
+            </div>
+          </div>
+
+          <!-- Custom Packet Crafting Form -->
+          <form id="traffic-simulator-form" onsubmit="handleTrafficSimulate(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) 120px; gap: 12px; align-items: end; background: rgba(15, 23, 42, 0.6); padding: 14px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.05);">
+            <div>
+              <label for="sim-src-select" style="font-size: 11px; color: #94a3b8; display: block; margin-bottom: 4px;">Source:</label>
+              <select id="sim-src-select" style="width: 100%; font-size: 12px; padding: 6px 8px; background: #0f172a; border: 1px solid #334155; color: #f8fafc; border-radius: 4px;">
+                <option value="internet">Public Internet User</option>
+                <option value="ec2">EC2 Web Server (10.0.1.50)</option>
+                <option value="rds">Private RDS Database (10.0.2.20)</option>
+              </select>
+            </div>
+            <div>
+              <label for="sim-dst-select" style="font-size: 11px; color: #94a3b8; display: block; margin-bottom: 4px;">Destination:</label>
+              <select id="sim-dst-select" style="width: 100%; font-size: 12px; padding: 6px 8px; background: #0f172a; border: 1px solid #334155; color: #f8fafc; border-radius: 4px;">
+                <option value="ec2">EC2 Web Server (10.0.1.50)</option>
+                <option value="rds">Private RDS Database (10.0.2.20)</option>
+                <option value="internet">Public Internet (0.0.0.0/0)</option>
+              </select>
+            </div>
+            <div>
+              <label for="sim-proto-select" style="font-size: 11px; color: #94a3b8; display: block; margin-bottom: 4px;">Protocol:</label>
+              <select id="sim-proto-select" style="width: 100%; font-size: 12px; padding: 6px 8px; background: #0f172a; border: 1px solid #334155; color: #f8fafc; border-radius: 4px;">
+                <option value="TCP">TCP</option>
+                <option value="UDP">UDP</option>
+                <option value="ICMP">ICMP</option>
+              </select>
+            </div>
+            <div>
+              <label for="sim-port-input" style="font-size: 11px; color: #94a3b8; display: block; margin-bottom: 4px;">Port:</label>
+              <input type="number" id="sim-port-input" value="80" min="1" max="65535" style="width: 100%; font-size: 12px; padding: 6px 8px; background: #0f172a; border: 1px solid #334155; color: #f8fafc; border-radius: 4px;">
+            </div>
+            <div>
+              <button type="submit" class="btn-primary" style="width: 100%; padding: 7px 12px; font-size: 12px; justify-content: center;">
+                &#9654; Simulate
+              </button>
+            </div>
+          </form>
+
+          <!-- Simulator Result Display Box -->
+          <div id="sim-result-box" style="display: none; margin-top: 14px; padding: 14px; border-radius: 6px; background: rgba(15, 23, 42, 0.9); border: 1px solid #334155;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <span id="sim-result-badge" class="badge" style="font-size: 12px; font-weight: 700;"></span>
+              <span id="sim-result-scenario" style="color: #94a3b8; font-size: 12px; font-family: monospace;"></span>
+            </div>
+            <p id="sim-result-reason" style="margin: 0 0 10px 0; font-size: 13px; color: #e2e8f0; line-height: 1.4;"></p>
+            <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 4px; font-size: 11px;">
+              <div style="font-weight: 600; color: #64748b; margin-bottom: 6px; text-transform: uppercase;">Hop-by-Hop Packet Trace:</div>
+              <div id="sim-result-trace" style="display: flex; flex-direction: column; gap: 4px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: none;">
+          <div id="test-progress-bar"></div>
+          <span id="test-progress-label"></span>
+        </div>
+
+        <div class="section-box">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 75px;">ID</th>
+                  <th>Test Case Objective</th>
+                  <th>Scope Category</th>
+                  <th>Expected Standard</th>
+                  <th>Actual Live Result</th>
+                  <th>Status</th>
+                  <th style="text-align: center; width: 80px;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="test-suite-table-body">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           PAGE 14: ACTIVITY LOGS
+           ===================================================================== -->
+      <section id="page-logs" class="portal-page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">&#128221; Activity &amp; Audit Logs</h1>
+            <p class="page-subtitle">Structured System, Security, Database, and API Request Activity Stream</p>
+          </div>
+          <button id="btn-export-logs" class="btn-secondary">Export JSON</button>
+        </div>
+
+        <div class="table-toolbar">
+          <div class="toolbar-left">
+            <input type="text" id="log-search-input" class="toolbar-input" placeholder="Search logs by keyword or resource...">
+            <select id="log-severity-filter" class="toolbar-select">
+              <option value="ALL">All Severities</option>
+              <option value="INFO">INFO Only</option>
+              <option value="WARNING">WARNING Only</option>
+              <option value="ERROR">ERROR Only</option>
+            </select>
+            <select id="log-type-filter" class="toolbar-select">
+              <option value="ALL">All Event Types</option>
+              <option value="APPLICATION">APPLICATION</option>
+              <option value="DATABASE">DATABASE</option>
+              <option value="SECURITY">SECURITY</option>
+              <option value="SYSTEM">SYSTEM</option>
+            </select>
+          </div>
+          <div class="toolbar-right">
+            <span class="badge badge-public" id="logs-counter-badge">0 Logs</span>
+          </div>
+        </div>
+
+        <div class="section-box">
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 170px;">Timestamp (UTC)</th>
+                  <th style="width: 90px;">Severity</th>
+                  <th style="width: 110px;">Type</th>
+                  <th style="width: 130px;">Resource</th>
+                  <th>Log Message</th>
+                </tr>
+              </thead>
+              <tbody id="logs-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           PAGE 15: SETTINGS
+           ===================================================================== -->
+      <section id="page-settings" class="portal-page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">&#9881; Portal &amp; System Settings</h1>
+            <p class="page-subtitle">Cloud Environment Parameters, Preferences, Runtime Diagnostic Controls, and System Metadata</p>
+          </div>
+          <button id="btn-save-settings" class="btn-primary">Save Preferences</button>
+        </div>
+
+        <div class="section-box">
+          <h2>&#9881; Project &amp; AWS Infrastructure Profile</h2>
+          <div class="table-responsive">
+            <table class="data-table">
+              <tbody>
+                <tr>
+                  <th style="width: 260px;">Project Title</th>
+                  <td><strong>AWS VPC with Public and Private Subnets</strong></td>
+                  <th style="width: 220px;">AWS Target Region</th>
+                  <td><code id="settings-region">us-east-1 (US East - N. Virginia)</code></td>
+                </tr>
+                <tr>
+                  <th>VPC Network CIDR</th>
+                  <td><span class="mono-chip" id="settings-vpc-cidr">10.0.0.0/16</span></td>
+                  <th>Database Private Host</th>
+                  <td><code id="settings-db-host">Private RDS Subnet</code></td>
+                </tr>
+                <tr>
+                  <th>Live Health Status</th>
+                  <td><span id="settings-backend-health" class="badge badge-pass">&#10003; Healthy</span></td>
+                  <th>Portal Theme</th>
+                  <td>
+                    <select id="settings-theme-mode" class="toolbar-select">
+                      <option value="dark-navy" selected>Deep Navy Dark Cloud Enterprise (Default)</option>
+                      <option value="high-contrast">High Contrast Dark Mode</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Health Polling Interval</th>
+                  <td colspan="3">
+                    <select id="settings-refresh-interval" class="toolbar-select">
+                      <option value="0">Disabled (Manual Refresh Only)</option>
+                      <option value="15000">Every 15 seconds (High Frequency)</option>
+                      <option value="30000" selected>Every 30 seconds (Default Recommended)</option>
+                      <option value="60000">Every 60 seconds (Conservative)</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="section-box">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h2>&#9729; AWS Integration &amp; Boto3 Diagnostic Status</h2>
+            <button id="btn-run-aws-probe" class="btn-primary" style="padding: 5px 12px; font-size: 11px;">&#9658; Run Live AWS Diagnostic Probe</button>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>AWS Service</th>
+                  <th>API Capability</th>
+                  <th>Status</th>
+                  <th>Latency</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody id="aws-diagnostic-tbody">
+                <tr>
+                  <td><strong>Amazon EC2</strong></td>
+                  <td><code>DescribeVpcs, DescribeSubnets, DescribeRouteTables</code></td>
+                  <td><span class="badge badge-pass" id="aws-stat-ec2">&#10003; Ready</span></td>
+                  <td><code id="aws-lat-ec2">-- ms</code></td>
+                  <td id="aws-det-ec2">Queries VPC topology, subnets, route tables, and gateways</td>
+                </tr>
+                <tr>
+                  <td><strong>Amazon RDS</strong></td>
+                  <td><code>DescribeDBInstances, DescribeDBSubnetGroups</code></td>
+                  <td><span class="badge badge-pass" id="aws-stat-rds">&#10003; Ready</span></td>
+                  <td><code id="aws-lat-rds">-- ms</code></td>
+                  <td id="aws-det-rds">Validates private database isolation &amp; configuration</td>
+                </tr>
+                <tr>
+                  <td><strong>Amazon CloudWatch</strong></td>
+                  <td><code>GetMetricStatistics, ListMetrics</code></td>
+                  <td><span class="badge badge-pass" id="aws-stat-cw">&#10003; Ready</span></td>
+                  <td><code id="aws-lat-cw">-- ms</code></td>
+                  <td id="aws-det-cw">Retrieves operational metrics for EC2 CPU and RDS DB</td>
+                </tr>
+                <tr>
+                  <td><strong>AWS Secrets Manager</strong></td>
+                  <td><code>GetSecretValue, DescribeSecret</code></td>
+                  <td><span class="badge badge-pass" id="aws-stat-sm">&#10003; Ready</span></td>
+                  <td><code id="aws-lat-sm">-- ms</code></td>
+                  <td id="aws-det-sm">Dynamic master database credential retrieval via IAM Role</td>
+                </tr>
+                <tr>
+                  <td><strong>AWS IAM</strong></td>
+                  <td><code>GetInstanceProfile, ListAttachedRolePolicies</code></td>
+                  <td><span class="badge badge-warn" id="aws-stat-iam">&#9888; Least Privilege</span></td>
+                  <td><code id="aws-lat-iam">-- ms</code></td>
+                  <td id="aws-det-iam">Instance profile active; least-privilege boundary verified</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           PAGE 16: DOCUMENTATION
+           ===================================================================== -->
+      <section id="page-documentation" class="portal-page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">&#128214; Project Documentation Center</h1>
+            <p class="page-subtitle">Academic Research Documentation, Architecture Design, Security Governance, and Technical Reference</p>
+          </div>
+        </div>
+
+        <div class="section-box" style="padding: 10px 16px; margin-bottom: 20px;">
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <a href="#doc-abstract" class="btn-secondary" style="font-size: 11px; padding: 3px 8px;">1. Abstract</a>
+            <a href="#doc-objectives" class="btn-secondary" style="font-size: 11px; padding: 3px 8px;">2. Objectives</a>
+            <a href="#doc-arch-map" class="btn-secondary" style="font-size: 11px; padding: 3px 8px;">3. Architecture Map</a>
+            <a href="#doc-vpc-subnets" class="btn-secondary" style="font-size: 11px; padding: 3px 8px;">4. CIDR &amp; Subnets</a>
+            <a href="#doc-gateways" class="btn-secondary" style="font-size: 11px; padding: 3px 8px;">5. Gateways &amp; Routes</a>
+            <a href="#doc-compute-db" class="btn-secondary" style="font-size: 11px; padding: 3px 8px;">6. EC2 &amp; RDS</a>
+            <a href="#doc-security-iam" class="btn-secondary" style="font-size: 11px; padding: 3px 8px;">7. Security &amp; IAM</a>
+            <a href="#doc-testing" class="btn-secondary" style="font-size: 11px; padding: 3px 8px;">8. Testing Suite</a>
+            <a href="#doc-glossary" class="btn-secondary" style="font-size: 11px; padding: 3px 8px;">9. Glossary</a>
+            <a href="#doc-troubleshoot" class="btn-secondary" style="font-size: 11px; padding: 3px 8px;">10. Troubleshooting</a>
+          </div>
+        </div>
+
+        <article id="doc-abstract" class="section-box">
+          <h2>&#128214; 1. Abstract &amp; Executive Summary</h2>
+          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.8;">
+            In modern cloud computing, multi-tier network segmentation is the cornerstone of defense-in-depth and enterprise infrastructure governance.
+            This academic cloud engineering project demonstrates the complete design, automated deployment, and validation of an Amazon Web Services (AWS)
+            Virtual Private Cloud (VPC) featuring segregated public and private subnets, dual Availability Zone redundancy, and zero-trust credential architecture.
+          </p>
+        </article>
+
+        <article id="doc-objectives" class="section-box">
+          <h2>&#127919; 2. Project Objectives</h2>
+          <ul style="margin: 0 0 0 20px; font-size: 13px; color: var(--text-secondary); line-height: 1.8;">
+            <li><strong>Automated Network Provisioning:</strong> Define custom VPC, subnets, route tables, internet gateways, and security groups declaratively in Terraform.</li>
+            <li><strong>Strict Network Segmentation:</strong> Isolate public ingress resources from private data workloads.</li>
+            <li><strong>Controlled Outbound Egress:</strong> Implement a NAT Gateway inside the public subnet for private instances.</li>
+            <li><strong>Zero Trust Security &amp; Least Privilege:</strong> Enforce security group chaining, eliminate SSH internet exposure, and store credentials in AWS Secrets Manager.</li>
+          </ul>
+        </article>
+
+        <article id="doc-arch-map" class="section-box">
+          <h2>&#128506; 3. Architecture &amp; Ideation Map</h2>
+          <div style="background-color: #080d18; padding: 14px; border-radius: 4px; border: 1px dashed var(--border-color); font-family: var(--font-mono); font-size: 11px; color: var(--accent-sky); margin: 12px 0; overflow-x: auto; line-height: 1.6;">
+[INTERNET USER] &rarr; [INTERNET GATEWAY] &rarr; [PUBLIC SUBNET: 10.0.1.0/24 (AZ-a)] &rarr; [EC2 WEB SERVER] &rarr; [PRIVATE RDS MYSQL: 10.0.3.0/24 (AZ-b)]
+          </div>
+        </article>
+
+        <article id="doc-vpc-subnets" class="section-box">
+          <h2>&#128290; 4. CIDR Allocation &amp; Subnet Segmentation Math</h2>
+          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.8;">
+            Class B root <code>10.0.0.0/16</code> partitioned into 3 Class C /24 blocks (251 usable IPs each after AWS 5-IP reservation).
+          </p>
+        </article>
+
+        <article id="doc-gateways" class="section-box">
+          <h2>&#128260; 5. Gateways &amp; Routing Mechanics</h2>
+          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.8;">
+            IGW provides 1:1 bidirectional translation for public instances. NAT Gateway provides many-to-one stateful outbound egress for private subnets.
+          </p>
+        </article>
+
+        <article id="doc-compute-db" class="section-box">
+          <h2>&#128187; 6. Compute &amp; Database Architecture</h2>
+          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.8;">
+            EC2 Ubuntu 22.04 LTS web proxy communicating over private VPC route to Amazon RDS MySQL 8.0 on TCP port 3306.
+          </p>
+        </article>
+
+        <article id="doc-security-iam" class="section-box">
+          <h2>&#128274; 7. Security Center &amp; Zero Trust IAM</h2>
+          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.8;">
+            Zero SSH exposure on internet; security group chaining; KMS storage encryption at rest; IAM role dynamic credential retrieval.
+          </p>
+        </article>
+
+        <article id="doc-testing" class="section-box">
+          <h2>&#129514; 8. Testing Methodology &amp; Validation</h2>
+          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.8;">
+            12 automated diagnostic test cases executing socket connect, route table traversal, and parameterized database CRUD validation.
+          </p>
+        </article>
+
+        <article id="doc-glossary" class="section-box">
+          <h2>&#128218; 9. Technical Cloud Infrastructure Glossary</h2>
+          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.8;">
+            VPC, CIDR, Subnet, IGW, NAT GW, Security Group, IAM, Secrets Manager, IMDSv2.
+          </p>
+        </article>
+
+        <article id="doc-troubleshoot" class="section-box">
+          <h2>&#128295; 10. Operational Troubleshooting Guide</h2>
+          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.8;">
+            Remediation steps for Database Connection Timeout (TCP 3306), Reverse Proxy 502 Bad Gateway, and Secrets Manager Access Denied.
+          </p>
+        </article>
+      </section>
+
+    </main>
+
+    <!-- Footer Notice -->
+    <footer class="portal-footer">
+      <p>AWS VPC Cloud Operations &amp; Network Security Command Center &bull; Enterprise Architecture &bull; Terraform Orchestrated</p>
+    </footer>
+  </div>
+
+  <!-- =========================================================================
+       4. MODALS (Edit Visitor & Delete Confirmation)
+       ========================================================================= -->
+  <div id="modal-edit-visitor" class="modal-overlay" style="display: none;">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">&#9998; Edit Visitor Record</h3>
+        <button class="btn-close" onclick="closeEditModal()">&times;</button>
+      </div>
+      <form id="form-edit-visitor" class="registration-form">
+        <input type="hidden" id="edit-visitor-id">
+        <div class="form-group">
+          <label for="edit-visitor-name">Visitor Full Name</label>
+          <input type="text" id="edit-visitor-name" required minlength="2" maxlength="100">
+        </div>
+        <div class="form-group">
+          <label for="edit-visitor-email">Email Address</label>
+          <input type="email" id="edit-visitor-email" required maxlength="150">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="closeEditModal()">Cancel</button>
+          <button type="submit" id="btn-save-edit" class="btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="modal-delete-visitor" class="modal-overlay" style="display: none;">
+    <div class="modal-box modal-danger">
+      <div class="modal-header">
+        <h3 class="modal-title">&#9888; Confirm Visitor Deletion</h3>
+        <button class="btn-close" onclick="closeDeleteModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to permanently delete visitor <strong id="delete-visitor-name-label"></strong> (#<span id="delete-visitor-id-label"></span>)?</p>
+        <p style="color: var(--accent-rose); font-size: 12px; margin-top: 8px;">
+          This action executes a parameterized DELETE query on the private Amazon RDS MySQL database.
+        </p>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+        <button type="button" id="btn-confirm-delete" class="btn-danger">Delete Record</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Application Controller Script -->
+  <script src="app.js"></script>
+</body>
+</html>

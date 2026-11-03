@@ -1,0 +1,28 @@
+[Unit]
+Description=AWS VPC Python Flask Backend Service
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/vpc-backend
+Environment="PATH=/opt/vpc-backend/venv/bin:/usr/local/bin:/usr/bin:/bin"
+EnvironmentFile=-/etc/vpc-app/app.env
+ExecStart=/opt/vpc-backend/venv/bin/gunicorn \
+    --workers 3 \
+    --bind 127.0.0.1:5000 \
+    --timeout 30 \
+    --access-logfile /var/log/vpc-app/access.log \
+    --error-logfile /var/log/vpc-app/error.log \
+    wsgi:app
+
+Restart=always
+RestartSec=5
+KillMode=mixed
+TimeoutStopSec=10
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+
