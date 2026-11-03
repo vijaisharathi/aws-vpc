@@ -13,6 +13,15 @@
 
 # AWS VPC with Public and Private Subnets: Complete PRD & Step-by-Step Implementation Guide
 
+[![AWS](https://img.shields.io/badge/AWS-VPC_10.0.0.0%2F16-FF9900?logo=amazon-aws&logoColor=white)](#)
+[![Terraform](https://img.shields.io/badge/IaC-Terraform_v1.5%2B-844FBA?logo=terraform&logoColor=white)](#)
+[![Database](https://img.shields.io/badge/Database-RDS_MySQL_8.0_(Private)-4479A1?logo=mysql&logoColor=white)](#)
+[![Runtime](https://img.shields.io/badge/Runtime-100%25_Offline_Local--First-7CB342)](#)  
+[![Tests](https://img.shields.io/badge/Tests-67%2F67_Passing_(100%25)-success?logo=pytest&logoColor=white)](#)
+[![Security](https://img.shields.io/badge/Security-AWS_SSM_(Zero_SSH_Keys)-0073BB)](#)
+[![Cost](https://img.shields.io/badge/Cost-100%25_Free_Tier_Eligible-brightgreen)](#)
+[![Region](https://img.shields.io/badge/Region-ap--southeast--2-232F3E?logo=amazon-aws&logoColor=white)](#)
+
 > **Official Academic Cloud Engineering Project**  
 > **Topic**: Design and Implementation of an AWS Virtual Private Cloud (VPC) with Public and Private Subnets, EC2 Web Tier, Isolated Amazon RDS MySQL Database, and Automated Infrastructure Validation.  
 > **Source of Truth**: Original Course Presentation (PPT)  
